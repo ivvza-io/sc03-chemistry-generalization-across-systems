@@ -14,6 +14,9 @@ Study Case 3 addresses a critical industrial risk:
 
 Rather than introducing new modeling techniques, this study focuses on **generalization**, assessing whether the chemistry-only hypothesis remains valid across different alloy systems and how the underlying chemistry–property relationship changes.
 
+By keeping the modeling pipeline fixed and changing only the alloy system, this study isolates differences in chemistry–property behavior from methodological artifacts.
+
+
 ---
 
 ## Core Question
@@ -24,11 +27,12 @@ Rather than introducing new modeling techniques, this study focuses on **general
 
 ## Thesis
 
-The chemistry-only approach generalizes across alloy systems in the sense that chemistry consistently defines the feasible strength envelope.  
-However, the *shape* of the chemistry–UTS relationship is system-dependent, requiring different functional representations to accurately capture the underlying behavior.
+The chemistry-only approach generalizes across alloy systems in the sense that, for alloys of similar metallurgical nature, chemistry consistently defines the feasible strength envelope.
 
-This distinction is critical for engineering practice:  
-chemistry sets the limits, but the way those limits are expressed depends on the alloy system.
+However, the functional relationship between chemistry and UTS is system-dependent.
+While some alloy systems are well approximated by linear behavior within their operational domain, others exhibit subtle non-linear effects driven by system-specific metallurgical behavior.
+
+This distinction is critical for engineering practice: generalization of a modeling *approach* does not imply invariance of the optimal functional *representation*.
 
 ---
 
@@ -47,7 +51,7 @@ chemistry sets the limits, but the way those limits are expressed depends on the
 - Advanced ML models (e.g., boosting, neural networks)
 - Probabilistic uncertainty calibration (deferred to later study cases)
 
-The goal is **not optimization**, but structural understanding and **transferability**. We are looking model reuse.
+The goal is **not optimization**, but structural understanding and **transferability**. The focus is on model reuse and structural transferability.
 
 ---
 
@@ -94,10 +98,6 @@ AA1050 and AA1100 are analyzed both independently and jointly, reflecting part o
 - Out-of-fold error analysis and residual diagnostics
 - Comparison of error magnitude, stability, and structure across systems
 
-### Design-oriented interpretation
-- Chemistry-space visualizations
-- Comparison of envelope shape and robustness between alloy systems
-
 ---
 
 ## Expected Outputs
@@ -110,7 +110,6 @@ AA1050 and AA1100 are analyzed both independently and jointly, reflecting part o
 ### Figures
 - Actual vs predicted (out-of-fold) by system
 - Residual diagnostics highlighting structural differences
-- Chemistry-space maps illustrating system-dependent envelope shapes
 
 ### Engineering insights
 - Identification of systems where linear assumptions are sufficient
@@ -127,6 +126,8 @@ The study is considered successful if it demonstrates:
 - System-dependent functional behavior consistent with metallurgical understanding
 - Stable, unbiased out-of-fold errors suitable for conservative interpretation
 - Actionable engineering insight, not just metric improvement
+- Clear evidence that model choice and functional form must be selected on a system-by-system basis, rather than assumed to transfer unchanged across alloys
+
 
 **Not considered success criteria:**
 - Maximum predictive accuracy
@@ -140,9 +141,9 @@ The study is considered successful if it demonstrates:
 Study Case 3 is complete when:
 
 - The SC2 pipeline has been successfully reused across multiple alloy systems
-- Differences in chemistry–UTS relationship shape are clearly demonstrated
-- The limits of chemistry-only generalization are explicitly identified
-- Results are summarized in terms of **what generalizes** and **what does not**
+- Generalization of the chemistry-only *approach* is demonstrated
+- Differences in chemistry–UTS functional behavior are clearly identified and linked to system-specific metallurgical effects
+- The limits of model reuse are explicitly defined in terms of functional form and engineering applicability
 
 ---
 
