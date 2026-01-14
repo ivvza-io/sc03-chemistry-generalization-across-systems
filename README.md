@@ -98,6 +98,20 @@ AA1050 and AA1100 are analyzed both independently and jointly, reflecting part o
 - Out-of-fold error analysis and residual diagnostics
 - Comparison of error magnitude, stability, and structure across systems
 
+### Residual structure across alloy systems
+
+To assess whether differences between alloy systems arise from modeling artifacts or from underlying metallurgy, the same ridge-based chemistry-only model was applied unchanged across systems.
+
+The figure below shows out-of-fold residuals versus true UTS for each alloy system:
+
+![Chemistry-only ridge model — residual structure across alloy systems](assets/sc03_residual_structure_alloy_systems.png)
+
+**Interpretation:**
+- AA3105 exhibits a compact, approximately symmetric residual structure.
+- Commercially pure alloys (AA1050 / AA1100) show stratification and curvature,   indicating system-specific chemistry–UTS behavior.
+- This confirms that while the modeling *approach* generalizes, the functional
+  relationship does not remain invariant across systems.
+
 ---
 
 ## Expected Outputs
