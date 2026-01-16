@@ -72,6 +72,7 @@ Any observed differences can be attributed to **metallurgical behavior**, not an
 
 > Portfolio-wide assumptions and conventions are documented in  
 > → [`README_EXTENDED.md`](https://github.com/ivvza-io/analytics-engineering-portfolio/blob/main/docs/README_EXTENDED.md)
+→ [`docs/technical-notes`](https://github.com/ivvza-io/sc03-chemistry-generalization-across-systems/tree/main/docs/technical_notes.md)
 
 ---
 
