@@ -1,168 +1,247 @@
-# Study Case 3 — Generalization Across Systems
+# SC03 — Chemistry-Only Modeling: Generalization Across Alloy Systems
 
-**Chemistry-Only Modeling Beyond a Single Alloy**
-
----
-
-## Position in the Portfolio
-
-This study case builds directly on **Study Case 2**, which established a chemistry-only baseline for UTS prediction in AA3105-O using group-aware validation and conservative design reasoning.
-
-Study Case 3 addresses a critical industrial risk:
-
-> “A model works for one alloy system. Does the same approach hold for others?”
-
-Rather than introducing new modeling techniques, this study focuses on **generalization**, assessing whether the chemistry-only hypothesis remains valid across different alloy systems and how the underlying chemistry–property relationship changes.
-
-By keeping the modeling pipeline fixed and changing only the alloy system, this study isolates differences in chemistry–property behavior from methodological artifacts.
-
+> **Chemistry-based models do not generalize as fixed formulas, but as a repeatable decision framework whose functional form is system-dependent.**
 
 ---
 
-## Core Question
+## 1. Why This Study Case Exists
 
-**Does a chemistry-only modeling approach generalize across alloy systems, and how does the functional relationship between chemistry and UTS vary between them?**
+After establishing in **SC02** that chemical composition model contains sufficient signal to initiate **internal UTS standards** for AA3105-O, a critical question remains unanswered:
 
----
+> **Do chemistry-based models generalize across alloy systems, or are they inherently system-specific?**
 
-## Thesis
+In industrial practice, a common failure mode occurs when:
+- A model performs well for one alloy
+- It is transferred to another system with minimal adaptation
+- Degradation occurs silently, often detected only through downstream failures   
 
-The chemistry-only approach generalizes across alloy systems in the sense that, for alloys of similar metallurgical nature, chemistry consistently defines the feasible strength envelope.
-
-However, the functional relationship between chemistry and UTS is system-dependent.
-While some alloy systems are well approximated by linear behavior within their operational domain, others exhibit subtle non-linear effects driven by system-specific metallurgical behavior.
-
-This distinction is critical for engineering practice: generalization of a modeling *approach* does not imply invariance of the optimal functional *representation*.
+This study case exists to evaluate whether the **chemistry-only modeling framework itself generalizes**, even if the **optimal functional representation does not**.
 
 ---
 
-## Scope and Constraints
+## 2. Problem Framing and Hypothesis
 
-### In scope
-- Chemistry-only feature sets, extracted from the same semantic layer used in SC2
-- UTS prediction at heat level as the primary target
-- Group-aware validation to ensure generalization to unseen heats
-- Comparison of representative functional forms (not exhaustive model tuning)
-- Interpretability sufficient to support metallurgical and engineering reasoning
+### Strategic Problem
 
-### Out of scope (explicit)
-- Introduction of process, geometry, or route variables
-- Exhaustive hyperparameter tuning or model selection sweeps
-- Advanced ML models (e.g., boosting, neural networks)
-- Probabilistic uncertainty calibration (deferred to later study cases)
+A modeling framework is valuable only if they:
+- Remain valid across material families, **or**
+- Explicitly signal when adaptation is required
 
-The goal is **not optimization**, but structural understanding and **transferability**. The focus is on model reuse and structural transferability.
+Blindly transferring chemistry-property relationships across alloy systems introduces hidden risk.
 
----
+The strategic question addressed here is therefore:
 
-## Systems Under Study
+> **Does the chemistry-only modeling framework remain valid across alloy systems, and what changes when it does not?**
 
-This study focuses on aluminum alloy systems with differing metallurgical behavior:
+### Hypothesis
 
-- **AA3105-O** — reference system from SC2
-- **AA1050-O** — commercially pure aluminum
-- **AA1100-O** — commercially pure aluminum, closely related to AA1050
-
-AA1050 and AA1100 are analyzed both independently and jointly, reflecting part of their overlapping chemistry and mechanical property ranges.
+> *The chemistry-only modeling framework generalizes structurally across alloy systems, but the optimal functional form of the chemistry-UTS relationship is system-dependent.*
 
 ---
 
-## Data Inputs (from the semantic layer)
+## 3. Modeling Philosophy and Design Principles
 
-- Heat-level chemistry composition records
-- Heat-level mechanical test results providing UTS values
-- Consistent grain guarantees and joins inherited from SC1
+This study deliberately **reuses the full analytical pipeline from SC02**.
 
-**Assumptions:**
-- One row per heat after aggregation
-- Chemistry values fall within validated operational ranges
-- Differences between systems are driven primarily by composition–property physics, not data artifacts
+No tuning, no feature expansion, no methodological changes.
 
----
+This is intentional.
 
-## Method Overview
+### Core Principle: Fixed Method, Variable Physics
 
-### Pipeline reuse
-- Reuse the full SC2 pipeline: extraction, aggregation, validation, diagnostics
-- Ensure comparability across systems by keeping methodology fixed
+By holding constant:
+- Data grain (heat-level)
+- Validation strategy (GroupKFold)
+- Feature set
+- Model families
 
-### Baseline functional form
-- Linear / ridge regression used as a common reference across all systems
-
-### Alternative functional representation
-- Introduce a limited set of non-linear transformations (e.g., second-order polynomial or logarithmic)
-- Selection driven by observed behavior and metallurgical plausibility, not tuning
-
-### Validation and diagnostics
-- GroupKFold evaluation
-- Out-of-fold error analysis and residual diagnostics
-- Comparison of error magnitude, stability, and structure across systems
-
-### Residual structure across alloy systems
-
-To assess whether differences between alloy systems arise from modeling artifacts or from underlying metallurgy, the same ridge-based chemistry-only model was applied unchanged across systems.
-
-The figure below shows out-of-fold residuals versus true UTS for each alloy system:
-
-![Chemistry-only ridge model — residual structure across alloy systems](assets/sc03_residual_structure_alloy_systems.png)
-
-**Interpretation:**
-- AA3105 exhibits a compact, approximately symmetric residual structure.
-- Commercially pure alloys (AA1050 / AA1100) show stratification and curvature,   indicating system-specific chemistry–UTS behavior.
-- This confirms that while the modeling *approach* generalizes, the functional
-  relationship does not remain invariant across systems.
+Any observed differences can be attributed to **metallurgical behavior**, not analytical artifacts.
 
 ---
 
-## Expected Outputs
+## 4. Methodological Decisions (What We Chose — and Why)
 
-### Tables
-- Model performance comparison by system (MAE, RMSE, R²; out-of-fold)
-- Summary of dominant chemistry drivers per system
-- Relative error magnitude as a proxy for unmodeled effects
+- **Alloy systems:** AA1050-O and AA1100-O, treated as a single 1xxx-O family
+- **Features:** Fe and Si only
+- **Target:** UTS at heat level
+- **Validation:** Group-aware cross-validation by heat
+- **Models evaluated:**
+  - Ridge (linear baseline)
+  - Polynomial (degree 2)
+  - Random Forest (high-flexibility reference)
 
-### Figures
-- Actual vs predicted (out-of-fold) by system
-- Residual diagnostics highlighting structural differences
-
-### Engineering insights
-- Identification of systems where linear assumptions are sufficient
-- Identification of systems where curvature matters
-- Clear boundaries on what chemistry-only models can and cannot support
+> Portfolio-wide assumptions and conventions are documented in  
+> → [`README_EXTENDED.md`](https://github.com/ivvza-io/analytics-engineering-portfolio/blob/main/docs/README_EXTENDED.md)
 
 ---
 
-## Evaluation Criteria
+## 5. Key Results and Evidence
 
-The study is considered successful if it demonstrates:
+### 5.1 Domain of Applicability (1xxx-O System)
 
-- Generalization of the chemistry-only hypothesis across systems
-- System-dependent functional behavior consistent with metallurgical understanding
-- Stable, unbiased out-of-fold errors suitable for conservative interpretation
-- Actionable engineering insight, not just metric improvement
-- Clear evidence that model choice and functional form must be selected on a system-by-system basis, rather than assumed to transfer unchanged across alloys
+**Table 1 — Chemistry and UTS domain (1xxx-O, heat-level)**
 
+| Variable | Min | P01 | P50 | P99 | Max |
+|--------|-----|-----|-----|-----|-----|
+| Fe (%) | 0.070 | 0.080 | 0.180 | 0.490 | 0.540 |
+| Si (%) | 0.003 | 0.006 | 0.063 | 0.161 | 0.170 |
+| UTS (MPa) | 56 | 61 | 76 | 95 | 102 |
 
-**Not considered success criteria:**
-- Maximum predictive accuracy
-- Complex models with limited interpretability
-- Marginal gains that do not change engineering decisions
+*This domain differs significantly from AA3105-O in both chemistry nature and range, and mechanical response.*
 
 ---
 
-## Exit Condition
+### 5.2 Cross-Validated Performance - Central Tendency
 
-Study Case 3 is complete when:
+**Table 2 — Out-of-fold performance summary (median values)**
 
-- The SC2 pipeline has been successfully reused across multiple alloy systems
-- Generalization of the chemistry-only *approach* is demonstrated
-- Differences in chemistry–UTS functional behavior are clearly identified and linked to system-specific metallurgical effects
-- The limits of model reuse are explicitly defined in terms of functional form and engineering applicability
+| Model | MAE (MPa) | RMSE (MPa) | R² |
+|------|-----------|------------|----|
+| Random Forest | 2.2 | 3.3 | 0.9 |
+| Polynomial (deg 2) | 2.9 | 4.1 | 0.8 |
+| Ridge | 3.3 | 4.5 | 0.8 |
+
+Key observations:
+- All models retain **meaningful predictive signal**
+- Differences in median MAE are moderate
+- Central metrics alone do **not** explain robustness differences
+
+**Design decision:**   
+Although tree-based models achieve superior raw error metrics, they were not selected as the basis for future design tools.
+For standard definition, robustness, **interpretability**, and stability of the **response surface** were prioritized over marginal accuracy gains.
 
 ---
 
-## Relationship to Next Study Case
+### 5.3 Robustness and Tail Behavior
 
-Study Case 3 establishes that while chemistry consistently defines strength envelopes, it cannot fully explain where a given heat lands within that envelope.
+Central tendency metrics alone are insufficient for evaluating the suitability of models for internal standards.   
+Robustness under tail behavior provides a more reliable basis for conservative decision-making.
 
-**Study Case 4** will build on this conclusion by introducing process variables to quantify how much of the remaining uncertainty can be reduced and under what conditions added complexity delivers real engineering value.
+**Table 3 — Out-of-fold p95 absolute error**
+
+| Model | P95 absolute error (MPa) |
+|------|--------------------------|
+| Random Forest | 6.5 |
+| Polynomial (deg 2) | 8.2 |
+| Ridge | 8.8 |
+
+**Figure 1 — P95 absolute error across models**  
+![P95 absolute error across models](assets/sc03_p95_absolute_error_1xxx.png)
+
+> *Tail behavior reveals clearer separation between model families than median MAE, highlighting robustness rather than accuracy as the dominant differentiator.*
+
+This result mirrors SC02 in principle, but **differs in magnitude and structure**.
+
+---
+
+### 5.4 Reliability Diagnostics
+
+**Figure 2 — Out-of-fold Actual vs Predicted (Polynomial model)**  
+![Out-of-fold Actual vs Predicted](assets/sc03_actual_vs_predicted_poly2.png)
+
+> *Introducing limited non-linearity alters how error is distributed across the chemistry space, without fundamentally changing signal strength.*
+
+---
+
+### 5.5 Driver Hierarchy and Plausibility
+
+**Table 4 — Permutation importance (absolute mean)**
+
+| Feature | Ridge | Poly2 | RF |
+|-------|-------|-------|----|
+| Fe | 0.704 | 1.609 | 2.451 |
+| Si | 0.206 | 0.070 | 0.324 |
+
+Key observations:
+- Fe consistently emerges as the dominant driver
+- Si acts as a secondary modifier
+- Driver hierarchy is stable across model families
+
+This reinforces metallurgical plausibility while revealing system-specific interactions.
+
+---
+
+## 6. Interpretation: What This Means for Decisions
+
+This study clarifies a critical distinction:
+
+> **Generalization of a standardization framework does not imply invariance of the optimal model or its functional form.**
+
+In practice:
+- Chemistry continues to define the feasible UTS envelope
+- However, the *shape* of that envelope is system-dependent
+- Linear models may be sufficient in some alloys
+- Limited non-linearity improves robustness in others
+
+Internal standards must therefore be:
+- **System-aware**
+- **Robustness-driven**
+- **Adaptable in functional form**
+
+---
+
+## 7. What This Model Is — and Is Not
+
+### This Model *Is* :
+- A validation of the **chemistry-only modeling framework**
+- A diagnostic for system-dependent behavior
+- A guide for selecting appropriate functional complexity
+
+### This Model *Is Not* :
+- A universal chemistry-UTS equation
+- A transferable standard without adaptation
+- A replacement for metallurgical judgment
+
+---
+
+## 8. Limitations, Risks, and Failure Modes
+
+- Fe and Si capture dominant trends but not all strengthening mechanisms
+- Small chemistry variations can induce non-linear effects in 1xxx systems
+- Over-simplified modeling risk masking interaction effects
+- Historical domains constrain model validity
+
+These risks motivate explicit evaluation of **process variables** in the next study case.
+
+---
+
+## 9. Why This Study Case Matters in the Portfolio
+
+This study case demonstrates that:
+
+1. For this alloy systems, chemistry-based modeling can generalize **methodologically**
+2. Functional form must remain **system-specific**
+3. Robustness and tail behavior should guide standard design
+
+Generalization in this context means reusing the analytical workflow, validation discipline, and decision criteria — not transferring coefficients, thresholds, or functional forms across systems.
+
+It serves as the bridge between:
+- **SC02:** feasibility of chemistry-based standards
+- **SC04:** deciding what additional variables justify inclusion
+- **SC05:** translating standards into uncertainty-aware tools
+
+---
+
+## 10. Next Steps
+
+- Identify which process variables explain deviations within chemistry-defined envelopes (→ SC04)
+- Quantify ROI of added complexity before expanding standards
+- Preserve interpretability while improving robustness
+
+---
+
+## References and Related Work
+
+- Portfolio assumptions and conventions:  
+  → [`README_EXTENDED.md`](https://github.com/ivvza-io/analytics-engineering-portfolio/blob/main/docs/README_EXTENDED.md)
+- Chemistry-only standard definition (single system):  
+  → [`SC02 — Chemistry-Only Modeling of UTS`](https://github.com/ivvza-io/sc02-chemistry-only-mechanical-properties.git)
+- Variable influence screening:  
+  → [`SC04 — Variable Influence Screening`](https://github.com/ivvza-io/sc04-variable-influence-screening.git)
+
+---
+
+### Takeaway
+
+This study shows that **modeling generalize as frameworks, not formulas**.  
+Chemistry consistently defines the strength envelope, but **how** that envelope is represented must respect system-specific behavior.
