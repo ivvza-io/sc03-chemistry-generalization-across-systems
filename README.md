@@ -249,3 +249,9 @@ It serves as the bridge between:
 
 This study shows that **models generalize as frameworks, not formulas**.  
 Chemistry consistently defines the strength envelope, but **how** that envelope is represented must respect system-specific behavior.
+
+---
+
+### How to Run This Study Case
+Reproducibility instructions are provided in:   
+→ [`HOW_TO_RUN.md`](HOW_TO_RUN.md)
