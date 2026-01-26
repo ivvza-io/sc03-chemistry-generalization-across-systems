@@ -23,7 +23,7 @@ This study case exists to evaluate whether the **chemistry-only modeling framewo
 
 ### Strategic Problem
 
-A modeling framework is valuable only if they:
+A modeling framework is valuable only if it:
 - Remain valid across material families, **or**
 - Explicitly signal when adaptation is required
 
@@ -71,10 +71,12 @@ Any observed differences can be attributed to **metallurgical behavior**, not an
   - Random Forest (high-flexibility reference)
 
 > Portfolio-wide assumptions and conventions are documented in  
-> → [`README_EXTENDED.md`](https://github.com/ivvza-io/analytics-engineering-portfolio/blob/main/docs/README_EXTENDED.md)   
-> Design rationale, methodological decisions, and implementation-level technical documentation are maintained in  
-→ [`docs/technical-notes`](https://github.com/ivvza-io/sc03-chemistry-generalization-across-systems/tree/main/docs/technical_notes.md)
-
+> → [`README_EXTENDED.md`](https://github.com/ivvza-io/analytics-engineering-portfolio/blob/main/docs/README_EXTENDED.md)  
+> Design rationale and technical details: [`docs/technical_notes.md`](docs/technical_notes.md)  
+>  
+> This study case uses the [`portfolio-analytics-toolkit`](https://github.com/ivvza-io/portfolio-analytics-toolkit) for reusable CV, metrics, and plotting utilities.  
+>  
+> Reproducibility instructions: [`HOW_TO_RUN.md`](HOW_TO_RUN.md)
 ---
 
 ## 5. Key Results and Evidence
@@ -237,13 +239,13 @@ It serves as the bridge between:
 - Portfolio assumptions and conventions:  
   → [`README_EXTENDED.md`](https://github.com/ivvza-io/analytics-engineering-portfolio/blob/main/docs/README_EXTENDED.md)
 - Chemistry-only standard definition (single system):  
-  → [`SC02 — Chemistry-Only Modeling of UTS`](https://github.com/ivvza-io/sc02-chemistry-only-mechanical-properties.git)
+  → [`SC02 — Chemistry-Only Modeling of UTS`](https://github.com/ivvza-io/sc02-chemistry-only-mechanical-properties)
 - Variable influence screening:  
-  → [`SC04 — Variable Influence Screening`](https://github.com/ivvza-io/sc04-variable-influence-screening.git)
+  → [`SC04 — Variable Influence Screening`](https://github.com/ivvza-io/sc04-variable-influence-screening)
 
 ---
 
 ### Takeaway
 
-This study shows that **modeling generalize as frameworks, not formulas**.  
+This study shows that **models generalize as frameworks, not formulas**.  
 Chemistry consistently defines the strength envelope, but **how** that envelope is represented must respect system-specific behavior.
