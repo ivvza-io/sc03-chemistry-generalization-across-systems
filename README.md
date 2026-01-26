@@ -101,8 +101,8 @@ Any observed differences can be attributed to **metallurgical behavior**, not an
 
 | Model | MAE (MPa) | RMSE (MPa) | R² |
 |------|-----------|------------|----|
-| Random Forest | 2.2 | 3.3 | 0.9 |
-| Polynomial (deg 2) | 2.9 | 4.1 | 0.8 |
+| Random Forest | 2.0 | 2.8 | 0.9 |
+| Polynomial (deg 2) | 2.9 | 4.0 | 0.8 |
 | Ridge | 3.3 | 4.5 | 0.8 |
 
 Key observations:
@@ -125,9 +125,9 @@ Robustness under tail behavior provides a more reliable basis for conservative d
 
 | Model | P95 absolute error (MPa) |
 |------|--------------------------|
-| Random Forest | 6.5 |
-| Polynomial (deg 2) | 8.2 |
-| Ridge | 8.8 |
+| Random Forest | 6.3 |
+| Polynomial (deg 2) | 8.0 |
+| Ridge | 8.6 |
 
 **Figure 1 — P95 absolute error across models**  
 ![P95 absolute error across models](assets/sc03_p95_absolute_error_1xxx.png)
@@ -151,10 +151,10 @@ This result mirrors SC02 in principle, but **differs in magnitude and structure*
 
 **Table 4 — Permutation importance (absolute mean)**
 
-| Feature | Ridge | Poly2 | RF |
-|-------|-------|-------|----|
-| Fe | 0.704 | 1.609 | 2.451 |
-| Si | 0.206 | 0.070 | 0.324 |
+| Feature | Ridge | Poly2 | RF  |
+|-------|-------|-------|-------|
+| Fe    | 0.704 | 1.609 | 2.479 |
+| Si    | 0.206 | 0.070 | 0.336 |
 
 Key observations:
 - Fe consistently emerges as the dominant driver
