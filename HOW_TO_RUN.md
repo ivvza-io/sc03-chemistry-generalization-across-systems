@@ -10,7 +10,7 @@ This section describes how to reproduce the analysis locally.
 ├── data/
 │   └── public/
 │       └── sc03/
-│           └── [dataset filename].csv
+│           └── v_models_analysis_o_1000.csv
 ├── notebooks/
 │   └── sc03_chemistry_generalization_across_systems.ipynb
 ├── requirements.txt
@@ -82,7 +82,7 @@ python -c "from portfolio_analytics_toolkit.cv import build_oof_predictions; pri
 
 Confirm the public dataset is present:
 ```bash
-ls -lh data/public/sc03/
+ls -lh data/public/sc03/v_models_analysis_o_1000
 ```
 
 If files are missing, verify that you cloned the repository correctly.
